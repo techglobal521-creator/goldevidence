@@ -1,0 +1,3 @@
+# version: 0-template (EMPTY - must be filled from the broker's published XAUUSD holiday schedule and approved before use)
+# type = holiday (no trading) or half_day (shortened session). Dates in broker-server time.
+date,type,note
