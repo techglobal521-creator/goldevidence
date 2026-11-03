@@ -1,0 +1,15 @@
+# secrets
+.env
+*.env
+*secret*
+*apikey*
+# build / runtime
+*.ex5
+*.ex4
+__pycache__/
+*.pyc
+# large data
+*.bi5
+ticks/
+*.hcc
+*.hst
