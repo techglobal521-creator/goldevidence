@@ -22,10 +22,11 @@ from .config import DEFAULT, HISTORICAL_PARTS, SPEC_REVISION
 
 
 def _time_ms(col: pd.Series) -> np.ndarray:
-    if np.issubdtype(col.dtype, np.number):
+    if pd.api.types.is_numeric_dtype(col):
         return col.to_numpy(dtype=np.int64)
     ts = pd.to_datetime(col.astype(str).str.replace(".", "-", n=2, regex=False))
-    return (ts.astype("int64") // 1_000_000).to_numpy()
+    # resolution-independent (pandas 3 may store datetimes in us, not ns)
+    return ((ts - pd.Timestamp(0)) // pd.Timedelta(milliseconds=1)).to_numpy(dtype=np.int64)
 
 
 def load_ticks(path):

@@ -58,8 +58,14 @@ class Calendar:
             if s.lower().startswith("date,"):
                 continue
             date, kind = [x.strip() for x in s.split(",")[:2]]
+            if kind not in ("holiday", "half_day"):
+                raise ValueError(f"calendar: unknown type {kind!r} on {date}")
             d = int(pd.Timestamp(date).value // 1_000_000 // MS_DAY)
+            if d in holidays or d in half:
+                raise ValueError(f"calendar: duplicate date {date}")
             (holidays if kind == "holiday" else half).add(d)
+        if version == "unknown":
+            raise ValueError("calendar: missing '# version:' line (calendar must be version-controlled)")
         return cls(version, hashlib.sha256(raw).hexdigest(), holidays, half)
 
     def is_trading_day(self, day: int, weekdays=(0, 1, 2, 3, 4)) -> bool:
@@ -70,6 +76,9 @@ class Calendar:
 def d6_clean(ticks: pd.DataFrame, cfg: AuditConfig) -> tuple[pd.DataFrame, dict]:
     """Collapse only consecutive rows identical in every field; keep equal timestamps in file
     order; days containing a decreasing timestamp are excluded (pending-owner)."""
+    if len(ticks) == 0:
+        return ticks.copy(), {"check": "D-6", "duplicates_removed": 0, "decreasing_timestamps": 0,
+                              "excluded_days": [], "status": cfg.d6_decreasing_excludes_day.status}
     same_as_prev = (ticks.shift(1) == ticks).all(axis=1)
     same_as_prev.iloc[0] = False
     cleaned = ticks[~same_as_prev].reset_index(drop=True)
