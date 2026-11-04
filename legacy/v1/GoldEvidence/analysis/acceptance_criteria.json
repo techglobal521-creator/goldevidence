@@ -1,0 +1,17 @@
+{
+  "_comment": "Frozen v1 acceptance criteria (Architecture doc section 8.5). Change only BEFORE the out-of-sample run, with a written reason.",
+  "version": "v1-2026-11-01",
+  "min_trades_to_evaluate": 100,
+  "preferred_trades": 200,
+  "min_expectancy_r": 0.10,
+  "bootstrap_lower_bound_gt": 0.0,
+  "bootstrap_resamples": 10000,
+  "min_profit_factor": 1.25,
+  "max_realised_drawdown_pct": 8.0,
+  "max_mc_p95_drawdown_pct": 12.0,
+  "max_single_month_share": 0.25,
+  "stress_extra_spread_mult": 0.5,
+  "stress_extra_slippage_price": 0.10,
+  "stress_min_expectancy_r": 0.0,
+  "baseline_percentile": 95
+}

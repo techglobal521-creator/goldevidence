@@ -1,0 +1,6 @@
+requests>=2.31
+pydantic>=2.6
+# optional: store the API key in Windows Credential Manager instead of an env var
+# keyring>=25
+# tests
+pytest>=8
